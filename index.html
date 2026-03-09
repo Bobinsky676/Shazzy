@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Coffee Press · Kilmarnock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream:   #faf6f0;
+      --espresso:#1a0e05;
+      --brown:   #4a2c14;
+      --latte:   #c49a6c;
+      --gold:    #d4a853;
+      --warm:    #f5ece0;
+      --muted:   #8a7060;
+      --white:   #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--espresso);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2.5rem;
+      background: rgba(250,246,240,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(196,154,108,0.18);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(26,14,5,0.08); }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: .01em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .88rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--brown);
+      text-decoration: none;
+      position: relative;
+      transition: color .2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0; height: 1.5px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform .25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-cta {
+      background: var(--brown);
+      color: var(--cream) !important;
+      padding: .45rem 1.2rem;
+      border-radius: 2px;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--gold); color: var(--espresso) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      padding-top: 72px;
+    }
+    .hero-text {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem 4rem 5rem 5rem;
+    }
+    .hero-tag {
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+    .hero-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 4vw, 4.2rem);
+      line-height: 1.12;
+      color: var(--brown);
+      margin-bottom: 1.4rem;
+    }
+    .hero-heading em { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 2.4rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: .75rem 2rem;
+      font-size: .88rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all .25s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--brown); color: var(--cream); }
+    .btn-primary:hover { background: var(--espresso); }
+    .btn-outline {
+      background: transparent;
+      color: var(--brown);
+      border: 1.5px solid var(--brown);
+    }
+    .btn-outline:hover { background: var(--brown); color: var(--cream); }
+
+    .hero-badges {
+      display: flex; gap: 1.6rem; margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(196,154,108,0.25);
+    }
+    .badge { text-align: center; }
+    .badge-num {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--brown);
+    }
+    .badge-label {
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: sepia(.12) saturate(1.1);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(26,14,5,.18) 0%, transparent 60%);
+    }
+    .hero-open-badge {
+      position: absolute;
+      bottom: 2rem; left: 2rem;
+      background: var(--cream);
+      padding: .9rem 1.4rem;
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(26,14,5,.18);
+    }
+    .hero-open-badge .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .dot-open { background: #4caf50; }
+    .dot-closed { background: #e57373; }
+    .open-text {
+      font-weight: 500;
+      font-size: .85rem;
+      color: var(--espresso);
+    }
+    .open-hours {
+      display: block;
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: .7rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      color: var(--brown);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 3rem;
+    }
+    .divider {
+      width: 48px; height: 2px;
+      background: var(--gold);
+      margin: 1rem 0 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap img {
+      width: 100%; border-radius: 4px;
+      filter: sepia(.1) saturate(1.15);
+      display: block;
+    }
+    .about-img-accent {
+      position: absolute;
+      bottom: -1.2rem; right: -1.2rem;
+      width: 60%; height: 60%;
+      border: 2px solid var(--gold);
+      border-radius: 4px;
+      z-index: -1;
+    }
+    .amenity-tags {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem;
+    }
+    .tag {
+      font-size: .78rem;
+      font-weight: 500;
+      padding: .3rem .85rem;
+      border-radius: 20px;
+      background: var(--warm);
+      color: var(--brown);
+      letter-spacing: .03em;
+    }
+
+    /* ── MENU ── */
+    #menu { background: var(--cream); }
+    .menu-tabs {
+      display: flex; gap: .5rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+    }
+    .tab-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .55rem 1.4rem;
+      border-radius: 2px;
+      border: 1.5px solid rgba(74,44,20,.2);
+      background: transparent;
+      color: var(--brown);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--brown);
+      color: var(--cream);
+      border-color: var(--brown);
+    }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+
+    .menu-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 1.4rem 1.2rem;
+      border-bottom: 3px solid transparent;
+      transition: all .25s;
+      position: relative;
+    }
+    .menu-card:hover {
+      border-bottom-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(26,14,5,.08);
+    }
+    .menu-card-icon {
+      font-size: 1.6rem; margin-bottom: .7rem;
+    }
+    .menu-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--brown);
+      margin-bottom: .3rem;
+    }
+    .menu-card-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: .9rem;
+    }
+    .menu-card-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .menu-note {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 1.8rem;
+      font-style: italic;
+    }
+
+    /* ── HOURS ── */
+    #hours { background: var(--brown); }
+    #hours .section-label { color: var(--gold); }
+    #hours .section-title { color: var(--cream); }
+    #hours .divider { background: var(--gold); }
+    #hours .section-desc { color: rgba(250,246,240,.65); }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .hours-table { width: 100%; }
+    .hours-table tr { border-bottom: 1px solid rgba(250,246,240,.08); }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td {
+      padding: .75rem 0;
+      font-size: .9rem;
+      color: rgba(250,246,240,.8);
+    }
+    .hours-table td:last-child { text-align: right; font-weight: 500; color: var(--cream); }
+    .day-today td { color: var(--gold) !important; }
+    .day-closed td:last-child { color: rgba(250,246,240,.35) !important; font-weight: 400; }
+
+    .contact-card {
+      background: rgba(250,246,240,.06);
+      border: 1px solid rgba(250,246,240,.12);
+      border-radius: 4px;
+      padding: 2rem;
+    }
+    .contact-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 1.4rem;
+    }
+    .contact-item {
+      display: flex; align-items: flex-start;
+      gap: .9rem;
+      margin-bottom: 1.1rem;
+    }
+    .contact-icon {
+      font-size: 1rem;
+      padding: .45rem;
+      background: rgba(212,168,83,.15);
+      border-radius: 4px;
+      flex-shrink: 0;
+      width: 2rem; height: 2rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-text a,
+    .contact-text span {
+      font-size: .88rem;
+      color: rgba(250,246,240,.8);
+      text-decoration: none;
+      display: block;
+      line-height: 1.5;
+    }
+    .contact-text a:hover { color: var(--gold); }
+    .contact-label {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .15rem;
+    }
+
+    /* ── MAP ── */
+    #location { background: var(--cream); }
+    .map-wrap {
+      border-radius: 4px;
+      overflow: hidden;
+      border: 2px solid rgba(196,154,108,.2);
+      box-shadow: 0 8px 32px rgba(26,14,5,.06);
+    }
+    .map-wrap iframe {
+      display: block; width: 100%; height: 380px; border: none;
+    }
+
+    /* ── REVIEWS ── */
+    #reviews { background: var(--warm); }
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr));
+      gap: 1.4rem;
+    }
+    .review-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 1.6rem;
+      box-shadow: 0 4px 18px rgba(26,14,5,.05);
+      transition: transform .25s;
+    }
+    .review-card:hover { transform: translateY(-4px); }
+    .stars { color: var(--gold); font-size: .9rem; margin-bottom: .8rem; letter-spacing: .05em; }
+    .review-text {
+      font-size: .86rem;
+      line-height: 1.65;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .review-author {
+      margin-top: 1rem;
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--brown);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--espresso);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: .5rem;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-tagline {
+      font-size: .82rem;
+      color: rgba(250,246,240,.4);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+    .footer-links {
+      display: flex; gap: 1.6rem; justify-content: center;
+      list-style: none; flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .footer-links a {
+      font-size: .8rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(250,246,240,.45);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy {
+      font-size: .75rem;
+      color: rgba(250,246,240,.2);
+      border-top: 1px solid rgba(250,246,240,.06);
+      padding-top: 1.5rem;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.4rem; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-text { padding: 3rem 1.6rem 2rem; }
+      .hero-image { height: 300px; }
+      .about-grid, .hours-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-img-accent { display: none; }
+      section { padding: 3.5rem 1.4rem; }
+      .hero-badges { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">The Coffee<span> Press</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#location" class="nav-cta">Find Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text reveal">
+    <p class="hero-tag">Est. in Kilmarnock · Since the first cup</p>
+    <h1 class="hero-heading">Where every cup<br/>tells a <em>story</em></h1>
+    <p class="hero-sub">A cosy neighbourhood café in the heart of Kilmarnock. Great coffee, honest food, and a warm welcome — every single day.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn btn-primary">View Our Menu</a>
+      <a href="#location" class="btn btn-outline">Find Us</a>
+    </div>
+    <div class="hero-badges">
+      <div class="badge">
+        <span class="badge-num">5+</span>
+        <span class="badge-label">Years Serving</span>
+      </div>
+      <div class="badge">
+        <span class="badge-num">4.1★</span>
+        <span class="badge-label">Google Rating</span>
+      </div>
+      <div class="badge">
+        <span class="badge-num">6</span>
+        <span class="badge-label">Days a Week</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <img src="https://lh5.googleusercontent.com/p/AF1QipPihTGjfZUygpbD8CBcYTezL_jgpAce_k2NKOWH=w800-h500-k-no" alt="The Coffee Press interior"/>
+    <div class="hero-overlay"></div>
+    <div class="hero-open-badge" id="statusBadge">
+      <span class="dot" id="statusDot"></span>
+      <span class="open-text" id="statusText"></span>
+      <span class="open-hours" id="statusHours"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal">
+        <img src="https://lh5.googleusercontent.com/p/AF1QipPihTGjfZUygpbD8CBcYTezL_jgpAce_k2NKOWH=w800-h500-k-no" alt="Coffee Press ambience"/>
+        <div class="about-img-accent"></div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">A little café with a<br/>big heart</h2>
+        <div class="divider"></div>
+        <p style="color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:1rem;">
+          Tucked away at 1 Bank Place in Kilmarnock town centre, The Coffee Press is the kind of café that keeps you coming back. Whether you're popping in for a flat white, a hearty brunch, or a slice of something sweet — you'll always leave smiling.
+        </p>
+        <p style="color:var(--muted);line-height:1.75;font-size:.95rem;">
+          We take pride in great-quality ingredients, seasonal specials, and a space where you can truly relax. Families, solo readers, and groups alike are all welcome here.
+        </p>
+        <div class="amenity-tags">
+          <span class="tag">☕ Great Coffee</span>
+          <span class="tag">🍵 Tea Selection</span>
+          <span class="tag">🥗 Healthy Options</span>
+          <span class="tag">🌿 Outdoor Seating</span>
+          <span class="tag">🥡 Takeaway</span>
+          <span class="tag">♿ Accessible</span>
+          <span class="tag">👨‍👩‍👧 Good for Kids</span>
+          <span class="tag">📱 NFC Payments</span>
+          <span class="tag">🛋️ Cosy Atmosphere</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-inner">
+    <p class="section-label reveal">What We Serve</p>
+    <h2 class="section-title reveal">Our Menu</h2>
+    <div class="divider reveal"></div>
+    <p class="section-desc reveal">Freshly made each morning. Prices are estimated from customer feedback and typical café pricing for Kilmarnock.</p>
+
+    <div class="menu-tabs reveal">
+      <button class="tab-btn active" data-tab="coffee">Coffee</button>
+      <button class="tab-btn" data-tab="food">Food</button>
+      <button class="tab-btn" data-tab="cakes">Cakes & Treats</button>
+      <button class="tab-btn" data-tab="drinks">Other Drinks</button>
+    </div>
+
+    <div class="menu-panel active" id="tab-coffee">
+      <div class="menu-card reveal"><div class="menu-card-icon">☕</div><div class="menu-card-name">Flat White</div><div class="menu-card-desc">Smooth espresso with velvety steamed milk</div><div class="menu-card-price">£3.00</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🫖</div><div class="menu-card-name">Cappuccino</div><div class="menu-card-desc">Classic espresso with foamy milk</div><div class="menu-card-price">£3.20</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">☕</div><div class="menu-card-name">Latte</div><div class="menu-card-desc">Espresso with steamed milk, light froth</div><div class="menu-card-price">£3.20</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🖤</div><div class="menu-card-name">Americano</div><div class="menu-card-desc">Espresso with hot water, bold & clean</div><div class="menu-card-price">£2.80</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🍫</div><div class="menu-card-name">Mocha</div><div class="menu-card-desc">Espresso, chocolate & steamed milk</div><div class="menu-card-price">£3.50</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🧊</div><div class="menu-card-name">Iced Latte</div><div class="menu-card-desc">Cold espresso over ice with milk</div><div class="menu-card-price">£3.50</div></div>
+    </div>
+
+    <div class="menu-panel" id="tab-food">
+      <div class="menu-card reveal"><div class="menu-card-icon">🍳</div><div class="menu-card-name">Big Breakfast</div><div class="menu-card-desc">Eggs, bacon, black pudding, toast & more</div><div class="menu-card-price">£8.50</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🥚</div><div class="menu-card-name">Eggs Benedict</div><div class="menu-card-desc">Poached eggs, ham & hollandaise on muffin</div><div class="menu-card-price">£8.00</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🥞</div><div class="menu-card-name">Pancakes</div><div class="menu-card-desc">Fluffy pancakes with toppings of your choice</div><div class="menu-card-price">£6.50</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🥪</div><div class="menu-card-name">Toastie</div><div class="menu-card-desc">Toasted sandwich with filled with seasonal fillings</div><div class="menu-card-price">£5.50</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🍲</div><div class="menu-card-name">Soup of the Day</div><div class="menu-card-desc">Freshly made daily soup with crusty bread</div><div class="menu-card-price">£5.00</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🐟</div><div class="menu-card-name">Cullen Skink</div><div class="menu-card-desc">Classic Scottish smoked haddock soup</div><div class="menu-card-price">£6.00</div></div>
+    </div>
+
+    <div class="menu-panel" id="tab-cakes">
+      <div class="menu-card reveal"><div class="menu-card-icon">🥐</div><div class="menu-card-name">Scone</div><div class="menu-card-desc">Freshly baked, served with jam & cream</div><div class="menu-card-price">£2.80</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🍰</div><div class="menu-card-name">Cake Slice</div><div class="menu-card-desc">Daily selection of home-style bakes</div><div class="menu-card-price">£3.20</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🍫</div><div class="menu-card-name">Tray Bake</div><div class="menu-card-desc">Seasonal tray bakes — ask staff for today's</div><div class="menu-card-price">£2.50</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🧇</div><div class="menu-card-name">Biscotti</div><div class="menu-card-desc">Crunchy Italian biscuit, perfect with coffee</div><div class="menu-card-price">£1.50</div></div>
+    </div>
+
+    <div class="menu-panel" id="tab-drinks">
+      <div class="menu-card reveal"><div class="menu-card-icon">🍵</div><div class="menu-card-name">Tea</div><div class="menu-card-desc">Great selection of teas — English, herbal & more</div><div class="menu-card-price">£2.20</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🍫</div><div class="menu-card-name">Hot Chocolate</div><div class="menu-card-desc">Rich & creamy, topped with cream</div><div class="menu-card-price">£3.50</div></div>
+      <div class="menu-card reveal"><div class="menu-card-icon">🥤</div><div class="menu-card-name">Cold Drinks</div><div class="menu-card-desc">Juice, water & soft drinks available</div><div class="menu-card-price">From £1.50</div></div>
+    </div>
+
+    <p class="menu-note reveal">* Prices are estimated based on typical local café pricing and customer reviews. Please ask in store for today's full menu and specials. Takeaway menu prices may differ.</p>
+  </div>
+</section>
+
+<!-- HOURS & CONTACT -->
+<section id="hours">
+  <div class="section-inner">
+    <p class="section-label reveal">Plan Your Visit</p>
+    <h2 class="section-title reveal">Opening Hours<br/>& Contact</h2>
+    <div class="divider reveal"></div>
+    <div class="hours-grid">
+      <div class="reveal">
+        <table class="hours-table">
+          <tbody>
+            <tr class="day-closed" id="row-mon"><td>Monday</td><td>Closed</td></tr>
+            <tr id="row-tue"><td>Tuesday</td><td>9:00 AM – 4:00 PM</td></tr>
+            <tr id="row-wed"><td>Wednesday</td><td>9:00 AM – 4:00 PM</td></tr>
+            <tr id="row-thu"><td>Thursday</td><td>9:00 AM – 4:00 PM</td></tr>
+            <tr id="row-fri"><td>Friday</td><td>9:00 AM – 4:00 PM</td></tr>
+            <tr id="row-sat"><td>Saturday</td><td>9:00 AM – 4:00 PM</td></tr>
+            <tr id="row-sun"><td>Sunday</td><td>10:00 AM – 3:00 PM</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="contact-card reveal" style="transition-delay:.1s">
+        <h3>Get in Touch</h3>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-text">
+            <span class="contact-label">Phone</span>
+            <a href="tel:+441563525054">+44 1563 525054</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-text">
+            <span class="contact-label">Address</span>
+            <a href="https://maps.app.goo.gl/djZh6TPhtdpH1hty6" target="_blank">1 Bank Place, Kilmarnock<br/>KA1 1HL, Scotland</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🗺️</div>
+          <div class="contact-text">
+            <span class="contact-label">Directions</span>
+            <a href="https://maps.app.goo.gl/djZh6TPhtdpH1hty6" target="_blank">Open in Google Maps →</a>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <a href="tel:+441563525054" class="btn btn-outline" style="color:var(--cream);border-color:rgba(250,246,240,.3);font-size:.8rem;padding:.6rem 1.4rem;">
+            📞 &nbsp;Call Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="location" style="padding-top:0;padding-bottom:0;">
+  <div class="map-wrap">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2241.8!2d-4.4997!3d55.6119!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4888176b3d8f0001%3A0x1234abcd!2s1+Bank+Pl%2C+Kilmarnock+KA1+1HL!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+      allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="The Coffee Press location map"></iframe>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-inner">
+    <p class="section-label reveal">What People Say</p>
+    <h2 class="section-title reveal">Guest Reviews</h2>
+    <div class="divider reveal"></div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"We had soup and toastie and cullen skink this morning. Everything was, as usual, excellent! My wife rated the cullen skink as best she has ever had!"</p>
+        <p class="review-author">— Google Reviewer</p>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.08s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Excellent food!! Great value. I had pancakes with biscotti and caramel — they were amazing along with a latte. Cakes are delicious. Definitely will be back."</p>
+        <p class="review-author">— Google Reviewer</p>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.15s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Love the food, loads of great options. The café has a really nice set up and service is great."</p>
+        <p class="review-author">— Google Reviewer</p>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.22s">
+        <div class="stars">★★★★☆</div>
+        <p class="review-text">"Staff are really welcoming and I enjoy the atmosphere — busy but still relaxed. I could enjoy a few chapters of my book with my coffee. Will return again for sure."</p>
+        <p class="review-author">— Google Reviewer</p>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.28s">
+        <div class="stars">★★★★☆</div>
+        <p class="review-text">"Nice wee place, liked the decor and staff very friendly. Large cappuccino excellent. Good quality produce, lovely eggs, bacon, black pudding. We will probably return."</p>
+        <p class="review-author">— Google Reviewer</p>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.34s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Currently doing takeaway brunch on Sunday. We had an Eggs Benedict and a muffin. Delicious!"</p>
+        <p class="review-author">— Google Reviewer</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">The Coffee<span> Press</span></div>
+  <p class="footer-tagline">1 Bank Place, Kilmarnock · KA1 1HL</p>
+  <ul class="footer-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="https://maps.app.goo.gl/djZh6TPhtdpH1hty6" target="_blank">Directions</a></li>
+    <li><a href="tel:+441563525054">Call Us</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 The Coffee Press, Kilmarnock. All rights reserved.</p>
+</footer>
+
+<script>
+  // ── NAV SCROLL ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── MENU TABS ──
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── OPEN/CLOSED STATUS ──
+  function updateStatus() {
+    const now = new Date();
+    const day = now.getDay(); // 0=Sun, 1=Mon...
+    const hour = now.getHours();
+    const min = now.getMinutes();
+    const timeNum = hour * 100 + min;
+
+    const rows = ['row-sun','row-mon','row-tue','row-wed','row-thu','row-fri','row-sat'];
+    rows.forEach((id, i) => {
+      const row = document.getElementById(id);
+      row.classList.remove('day-today');
+      if (i === day) row.classList.add('day-today');
+    });
+
+    let open = false, hoursText = '';
+    // Mon = closed
+    if (day === 1) { hoursText = 'Closed today'; }
+    else if (day === 0) { open = timeNum >= 1000 && timeNum < 1500; hoursText = 'Sun: 10AM – 3PM'; }
+    else { open = timeNum >= 900 && timeNum < 1600; hoursText = 'Tue–Sat: 9AM – 4PM'; }
+
+    const dot = document.getElementById('statusDot');
+    dot.className = 'dot ' + (open ? 'dot-open' : 'dot-closed');
+    document.getElementById('statusText').textContent = open ? 'Open Now' : 'Currently Closed';
+    document.getElementById('statusHours').textContent = hoursText;
+  }
+  updateStatus();
+</script>
+</body>
+</html>
